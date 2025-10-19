@@ -1,0 +1,37 @@
+{
+	"name": "pipeline1",
+	"properties": {
+		"activities": [
+			{
+				"name": "Script1",
+				"type": "Script",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "ls_sql_dw_entel",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "NonQuery",
+							"text": "------------------------------------------------------------\r\n-- CREACIÓN DE ESQUEMAS\r\n------------------------------------------------------------\r\nEXEC('CREATE SCHEMA bronze');\r\nEXEC('CREATE SCHEMA silver');\r\nEXEC('CREATE SCHEMA gold');\r\n\r\n\r\n------------------------------------------------------------\r\n-- TABLAS BRONZE\r\n------------------------------------------------------------\r\nEXEC('\r\nCREATE TABLE bronze.datos (\r\n  fecha_inicio NVARCHAR(255),\r\n  fecha_fin NVARCHAR(255),\r\n  numero NVARCHAR(255),\r\n  imei NVARCHAR(255),\r\n  rbs_utilizada NVARCHAR(255),\r\n  celda NVARCHAR(255),\r\n  latitud_longitud NVARCHAR(255),\r\n  subidos NVARCHAR(255),\r\n  descargados NVARCHAR(255),\r\n  total NVARCHAR(255)\r\n)');\r\n \r\nEXEC('\r\nCREATE TABLE bronze.llamadas (\r\n  servicio NVARCHAR(255),\r\n  registro NVARCHAR(255),\r\n  numero_a NVARCHAR(255),\r\n  imei_a NVARCHAR(255),\r\n  rbs_utilizada_a NVARCHAR(255),\r\n  celda_a NVARCHAR(255),\r\n  latitud_longitud_a NVARCHAR(255),\r\n  numero_b NVARCHAR(255),\r\n  imei_b NVARCHAR(255),\r\n  rbs_utilizada_b NVARCHAR(255),\r\n  celda_b NVARCHAR(255),\r\n  latitud_longitud_b NVARCHAR(255),\r\n  fecha NVARCHAR(255),\r\n  duracion NVARCHAR(255)\r\n)');\r\n\r\n\r\n------------------------------------------------------------\r\n-- TABLAS SILVER\r\n------------------------------------------------------------\r\nEXEC('\r\nCREATE TABLE silver.datos (\r\n  fecha_inicio DATETIME,\r\n  fecha_fin DATETIME,\r\n  numero NVARCHAR(255),\r\n  imei NVARCHAR(255),\r\n  rbs_utilizada NVARCHAR(255),\r\n  celda NVARCHAR(255),\r\n  latitud DECIMAL(18,8),\r\n  longitud DECIMAL(18,8),\r\n  subidos INT,\r\n  descargados INT,\r\n  total INT\r\n)');\r\n\r\nEXEC('\r\nCREATE TABLE silver.llamadas (\r\n  servicio NVARCHAR(255),\r\n  registro NVARCHAR(255),\r\n  numero_a NVARCHAR(255),\r\n  imei_a NVARCHAR(255),\r\n  rbs_utilizada_a NVARCHAR(255),\r\n  celda_a NVARCHAR(255),\r\n  latitud_a DECIMAL(18,8),\r\n  longitud_a DECIMAL(18,8),\r\n  numero_b NVARCHAR(255),\r\n  imei_b NVARCHAR(255),\r\n  rbs_utilizada_b NVARCHAR(255),\r\n  celda_b NVARCHAR(255),\r\n  latitud_b DECIMAL(18,8),\r\n  longitud_b DECIMAL(18,8),\r\n  fecha DATETIME,\r\n  duracion TIME\r\n)');\r\n\r\n\r\n------------------------------------------------------------\r\n-- TABLAS GOLD\r\n------------------------------------------------------------\r\nEXEC('\r\nCREATE TABLE gold.dim_fecha (\r\n  id_fecha INT IDENTITY(1, 1) PRIMARY KEY,\r\n  fecha DATETIME\r\n)');\r\n\r\nEXEC('\r\nCREATE TABLE gold.dim_numero (\r\n  id_numero INT IDENTITY(1, 1) PRIMARY KEY,\r\n  numero NVARCHAR(255),\r\n  imei NVARCHAR(255)\r\n)');\r\n\r\nEXEC('\r\nCREATE TABLE gold.dim_radiobase (\r\n  id_radiobase INT IDENTITY(1, 1) PRIMARY KEY,\r\n  radiobase NVARCHAR(255),\r\n  celda NVARCHAR(255),\r\n  latitud DECIMAL(18,8),\r\n  longitud DECIMAL(18,8)\r\n)');\r\n\r\nEXEC('\r\nCREATE TABLE gold.dim_servicio (\r\n  id_servicio INT IDENTITY(1, 1) PRIMARY KEY,\r\n  servicio NVARCHAR(255)\r\n)');\r\n\r\nEXEC('\r\nCREATE TABLE gold.dim_registro (\r\n  id_registro INT IDENTITY(1, 1) PRIMARY KEY,\r\n  registro NVARCHAR(255)\r\n)');\r\n\r\nEXEC('\r\nCREATE TABLE gold.hechos_datos (\r\n  id_datos INT IDENTITY(1, 1) PRIMARY KEY,\r\n  subidos INT,\r\n  descargados INT,\r\n  total INT,\r\n  id_fecha_inicio INT,\r\n  id_fecha_fin INT,\r\n  id_numero INT,\r\n  id_radiobase INT,\r\n  FOREIGN KEY (id_radiobase) REFERENCES gold.dim_radiobase (id_radiobase),\r\n  FOREIGN KEY (id_numero) REFERENCES gold.dim_numero (id_numero),\r\n  FOREIGN KEY (id_fecha_inicio) REFERENCES gold.dim_fecha (id_fecha),\r\n  FOREIGN KEY (id_fecha_fin) REFERENCES gold.dim_fecha (id_fecha)\r\n)');\r\n\r\nEXEC('\r\nCREATE TABLE gold.hechos_llamadas (\r\n  id_llamada INT IDENTITY(1, 1) PRIMARY KEY,\r\n  duracion TIME,\r\n  id_servicio INT,\r\n  id_registro INT,\r\n  id_numero_a INT,\r\n  id_radiobase_a INT,\r\n  id_numero_b INT,\r\n  id_radiobase_b INT,\r\n  id_fecha INT,\r\n  FOREIGN KEY (id_servicio) REFERENCES gold.dim_servicio (id_servicio),\r\n  FOREIGN KEY (id_registro) REFERENCES gold.dim_registro (id_registro),\r\n  FOREIGN KEY (id_radiobase_a) REFERENCES gold.dim_radiobase (id_radiobase),\r\n  FOREIGN KEY (id_radiobase_b) REFERENCES gold.dim_radiobase (id_radiobase),\r\n  FOREIGN KEY (id_numero_a) REFERENCES gold.dim_numero (id_numero),\r\n  FOREIGN KEY (id_numero_b) REFERENCES gold.dim_numero (id_numero),\r\n  FOREIGN KEY (id_fecha) REFERENCES gold.dim_fecha (id_fecha)\r\n)');\r\n"
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			}
+		],
+		"folder": {
+			"name": "schems"
+		},
+		"annotations": []
+	}
+}
