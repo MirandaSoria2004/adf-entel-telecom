@@ -12,7 +12,7 @@
 						"referenceName": "ds_sql_bronze_llamadas",
 						"type": "DatasetReference"
 					},
-					"name": "source1"
+					"name": "BronzeLlamadas"
 				}
 			],
 			"sinks": [
@@ -21,18 +21,21 @@
 						"referenceName": "ds_sql_silver_llamadas",
 						"type": "DatasetReference"
 					},
-					"name": "sink1"
+					"name": "SilverLlamadas"
 				}
 			],
 			"transformations": [
 				{
-					"name": "select1"
+					"name": "SelectColumns"
 				},
 				{
-					"name": "derivedColumn1"
+					"name": "SepararLatA"
 				},
 				{
-					"name": "cast1"
+					"name": "SepararLatB"
+				},
+				{
+					"name": "QuitarColumnasViejas"
 				}
 			],
 			"scriptLines": [
@@ -55,8 +58,8 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> source1",
-				"source1 select(mapColumn(",
+				"     format: 'table') ~> BronzeLlamadas",
+				"BronzeLlamadas select(mapColumn(",
 				"          servicio,",
 				"          registro,",
 				"          numero_a,",
@@ -73,14 +76,32 @@
 				"          duracion",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select1",
-				"select1 derive(fecha = trim(fecha)) ~> derivedColumn1",
-				"derivedColumn1 cast(output(",
-				"          fecha as date 'dd-MM-yyyy',",
-				"          duracion as string",
+				"     skipDuplicateMapOutputs: true) ~> SelectColumns",
+				"SelectColumns derive(latitud_a = toDecimal(split(latitud_longitud_a, ',')[1]),",
+				"          longitud_a = toDecimal(split(latitud_longitud_a, ',')[2])) ~> SepararLatA",
+				"SepararLatA derive(latitub_b = toDecimal(split(latitud_longitud_b, ',')[1]),",
+				"          longitud_b = toDecimal(split(latitud_longitud_b, ',')[2])) ~> SepararLatB",
+				"SepararLatB select(mapColumn(",
+				"          servicio,",
+				"          registro,",
+				"          numero_a,",
+				"          imei_a,",
+				"          rbs_utilizada_a,",
+				"          celda_a,",
+				"          numero_b,",
+				"          imei_b,",
+				"          rbs_utilizada_b,",
+				"          celda_b,",
+				"          fecha,",
+				"          duracion,",
+				"          latitud_a,",
+				"          longitud_a,",
+				"          latitub_b,",
+				"          longitud_b",
 				"     ),",
-				"     errors: true) ~> cast1",
-				"cast1 sink(allowSchemaDrift: true,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> QuitarColumnasViejas",
+				"QuitarColumnasViejas sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          servicio as string,",
@@ -104,28 +125,11 @@
 				"     insertable:true,",
 				"     updateable:false,",
 				"     upsertable:false,",
+				"     truncate:true,",
 				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError',",
-				"     mapColumn(",
-				"          servicio,",
-				"          registro,",
-				"          numero_a,",
-				"          imei_a,",
-				"          rbs_utilizada_a,",
-				"          celda_a,",
-				"          latitud_a = latitud_longitud_a,",
-				"          longitud_a = latitud_longitud_a,",
-				"          numero_b,",
-				"          imei_b,",
-				"          rbs_utilizada_b,",
-				"          celda_b,",
-				"          latitud_b = latitud_longitud_b,",
-				"          longitud_b = latitud_longitud_b,",
-				"          fecha,",
-				"          duracion",
-				"     )) ~> sink1"
+				"     errorHandlingOption: 'stopOnFirstError') ~> SilverLlamadas"
 			]
 		}
 	}
