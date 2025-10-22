@@ -1,9 +1,9 @@
 {
-	"name": "PL_SILVER",
+	"name": "PL_SILVER_LLAMADAS",
 	"properties": {
 		"activities": [
 			{
-				"name": "Data flow1",
+				"name": "df_transform_llamadas",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
