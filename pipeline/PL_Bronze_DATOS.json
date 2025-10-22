@@ -1,33 +1,9 @@
 {
-	"name": "PL_BRONZE_LLAMADAS",
+	"name": "PL_Bronze_DATOS",
 	"properties": {
 		"activities": [
 			{
-				"name": "Data flow1",
-				"type": "ExecuteDataFlow",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"dataflow": {
-						"referenceName": "df_bronze_cargar_llamadas",
-						"type": "DataFlowReference"
-					},
-					"compute": {
-						"coreCount": 8,
-						"computeType": "General"
-					},
-					"traceLevel": "Fine"
-				}
-			},
-			{
-				"name": "Copy_llamadas_bronze",
+				"name": "Copy data1",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -61,168 +37,120 @@
 						"mappings": [
 							{
 								"source": {
-									"name": "SERVICIO",
+									"name": "FECHA_INICIO",
 									"type": "String",
 									"physicalType": "String"
 								},
 								"sink": {
-									"name": "servicio",
+									"name": "fecha_inicio",
 									"type": "String",
 									"physicalType": "nvarchar"
 								}
 							},
 							{
 								"source": {
-									"name": "REGISTRO",
+									"name": "FECHA_FIN",
 									"type": "String",
 									"physicalType": "String"
 								},
 								"sink": {
-									"name": "registro",
+									"name": "fecha_fin",
 									"type": "String",
 									"physicalType": "nvarchar"
 								}
 							},
 							{
 								"source": {
-									"name": "NUMERO_A",
+									"name": "NUMERO",
 									"type": "String",
 									"physicalType": "String"
 								},
 								"sink": {
-									"name": "numero_a",
+									"name": "numero",
 									"type": "String",
 									"physicalType": "nvarchar"
 								}
 							},
 							{
 								"source": {
-									"name": "IMEI_A",
+									"name": "IMEI",
 									"type": "String",
 									"physicalType": "String"
 								},
 								"sink": {
-									"name": "imei_a",
+									"name": "imei",
 									"type": "String",
 									"physicalType": "nvarchar"
 								}
 							},
 							{
 								"source": {
-									"name": "RBS UTILIZADA_A",
+									"name": "RBS_UTILIZADA",
 									"type": "String",
 									"physicalType": "String"
 								},
 								"sink": {
-									"name": "rbs_utilizada_a",
+									"name": "rbs_utilizada",
 									"type": "String",
 									"physicalType": "nvarchar"
 								}
 							},
 							{
 								"source": {
-									"name": "CELDA_A",
+									"name": "CELDA",
 									"type": "String",
 									"physicalType": "String"
 								},
 								"sink": {
-									"name": "celda_a",
+									"name": "celda",
 									"type": "String",
 									"physicalType": "nvarchar"
 								}
 							},
 							{
 								"source": {
-									"name": "LATITUD_LONGITUD_A",
+									"name": "LATITUD LONGITUD",
 									"type": "String",
 									"physicalType": "String"
 								},
 								"sink": {
-									"name": "latitud_longitud_a",
+									"name": "latitud_longitud",
 									"type": "String",
 									"physicalType": "nvarchar"
 								}
 							},
 							{
 								"source": {
-									"name": "NUMERO_B",
+									"name": "SUBIDOS",
 									"type": "String",
 									"physicalType": "String"
 								},
 								"sink": {
-									"name": "numero_b",
+									"name": "subidos",
 									"type": "String",
 									"physicalType": "nvarchar"
 								}
 							},
 							{
 								"source": {
-									"name": "IMEI_B",
+									"name": "DESCARGADOS",
 									"type": "String",
 									"physicalType": "String"
 								},
 								"sink": {
-									"name": "imei_b",
+									"name": "descargados",
 									"type": "String",
 									"physicalType": "nvarchar"
 								}
 							},
 							{
 								"source": {
-									"name": "RBS_UTILIZADA_B",
+									"name": "TOTAL",
 									"type": "String",
 									"physicalType": "String"
 								},
 								"sink": {
-									"name": "rbs_utilizada_b",
-									"type": "String",
-									"physicalType": "nvarchar"
-								}
-							},
-							{
-								"source": {
-									"name": "CELDA_B",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "celda_b",
-									"type": "String",
-									"physicalType": "nvarchar"
-								}
-							},
-							{
-								"source": {
-									"name": "LATITUD_LONGITUD_B",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "latitud_longitud_b",
-									"type": "String",
-									"physicalType": "nvarchar"
-								}
-							},
-							{
-								"source": {
-									"name": "FECHA",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "fecha",
-									"type": "String",
-									"physicalType": "nvarchar"
-								}
-							},
-							{
-								"source": {
-									"name": "DURACION",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "duracion",
+									"name": "total",
 									"type": "String",
 									"physicalType": "nvarchar"
 								}
@@ -237,13 +165,187 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "llamadas_entel_csv",
+						"referenceName": "m_datos_entel_5csv",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "ds_sql_bronze_llamadas",
+						"referenceName": "ds_sql_bronze_datos",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Copy data2",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "FECHA_INICIO",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "fecha_inicio",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FECHA_FIN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "fecha_fin",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "NUMERO",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "numero",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "IMEI",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "imei",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "RBS_UTILIZADA",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "rbs_utilizada",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CELDA",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "celda",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "LATITUD LONGITUD",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "latitud_longitud",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SUBIDOS",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "subidos",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "DESCARGADOS",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "descargados",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "TOTAL",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "total",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "m_datos_entel_6csv",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_sql_bronze_datos",
 						"type": "DatasetReference"
 					}
 				]
