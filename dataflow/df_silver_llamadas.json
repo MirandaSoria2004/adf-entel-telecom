@@ -21,7 +21,11 @@
 						"referenceName": "ds_sql_silver_llamadas",
 						"type": "DatasetReference"
 					},
-					"name": "sink1"
+					"name": "sink1",
+					"rejectedDataLinkedService": {
+						"referenceName": "ls_sa_raw_entel",
+						"type": "LinkedServiceReference"
+					}
 				}
 			],
 			"transformations": [
@@ -32,10 +36,10 @@
 					"name": "SepararLatA"
 				},
 				{
-					"name": "SepararLatB"
+					"name": "QuitarColumnasViejas"
 				},
 				{
-					"name": "QuitarColumnasViejas"
+					"name": "SepararLatB"
 				}
 			],
 			"scriptLines": [
@@ -79,8 +83,6 @@
 				"     skipDuplicateMapOutputs: true) ~> SelectColumns",
 				"SelectColumns derive(latitud_a = toDecimal(split(latitud_longitud_a, ',')[1]),",
 				"          longitud_a = toDecimal(split(latitud_longitud_a, ',')[2])) ~> SepararLatA",
-				"SepararLatA derive(longitud_b = toDecimal(split(latitud_longitud_b, ',')[2]),",
-				"          latitud_b = toDecimal(split(latitud_longitud_b, ',')[1])) ~> SepararLatB",
 				"SepararLatB select(mapColumn(",
 				"          servicio,",
 				"          registro,",
@@ -101,6 +103,8 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> QuitarColumnasViejas",
+				"SepararLatA derive(latitud_b = toDecimal(split(latitud_longitud_b, ',')[1]),",
+				"          longitud_b = toDecimal(split(latitud_longitud_b, ',')[2])) ~> SepararLatB",
 				"QuitarColumnasViejas sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
