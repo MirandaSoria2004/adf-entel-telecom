@@ -41,5 +41,6 @@
 			"schema": "gold",
 			"table": "dim_radiobase"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

@@ -61,5 +61,6 @@
 			"schema": "gold",
 			"table": "hechos_llamadas"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

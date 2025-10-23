@@ -88,5 +88,6 @@
 			"schema": "silver",
 			"table": "llamadas"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }
