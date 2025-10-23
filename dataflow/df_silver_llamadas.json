@@ -21,11 +21,7 @@
 						"referenceName": "ds_sql_silver_llamadas",
 						"type": "DatasetReference"
 					},
-					"name": "sink1",
-					"rejectedDataLinkedService": {
-						"referenceName": "ls_sa_raw_entel",
-						"type": "LinkedServiceReference"
-					}
+					"name": "sink1"
 				}
 			],
 			"transformations": [
@@ -98,7 +94,7 @@
 				"          duracion,",
 				"          latitud_a,",
 				"          longitud_a,",
-				"          latitub_b = latitud_b,",
+				"          latitud_b,",
 				"          longitud_b",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
@@ -129,7 +125,6 @@
 				"     insertable:true,",
 				"     updateable:false,",
 				"     upsertable:false,",
-				"     truncate:true,",
 				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
