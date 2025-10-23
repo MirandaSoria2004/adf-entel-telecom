@@ -21,7 +21,7 @@
 						"referenceName": "ds_sql_silver_llamadas",
 						"type": "DatasetReference"
 					},
-					"name": "SilverLlamadas"
+					"name": "sink1"
 				}
 			],
 			"transformations": [
@@ -110,16 +110,16 @@
 				"          imei_a as string,",
 				"          rbs_utilizada_a as string,",
 				"          celda_a as string,",
-				"          latitud_a as decimal(18,8),",
-				"          longitud_a as decimal(18,8),",
+				"          latitud_a as decimal(18,0),",
+				"          longitud_a as decimal(18,0),",
 				"          numero_b as string,",
 				"          imei_b as string,",
 				"          rbs_utilizada_b as string,",
 				"          celda_b as string,",
-				"          latitud_b as decimal(18,8),",
-				"          longitud_b as decimal(18,8),",
-				"          fecha as timestamp,",
-				"          duracion as timestamp",
+				"          latitud_b as decimal(18,0),",
+				"          longitud_b as decimal(18,0),",
+				"          fecha as string,",
+				"          duracion as string",
 				"     ),",
 				"     deletable:false,",
 				"     insertable:true,",
@@ -129,7 +129,7 @@
 				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> SilverLlamadas"
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
 			]
 		}
 	}

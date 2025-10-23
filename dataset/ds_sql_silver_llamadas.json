@@ -39,13 +39,13 @@
 				"name": "latitud_a",
 				"type": "decimal",
 				"precision": 18,
-				"scale": 8
+				"scale": 0
 			},
 			{
 				"name": "longitud_a",
 				"type": "decimal",
 				"precision": 18,
-				"scale": 8
+				"scale": 0
 			},
 			{
 				"name": "numero_b",
@@ -67,24 +67,21 @@
 				"name": "latitud_b",
 				"type": "decimal",
 				"precision": 18,
-				"scale": 8
+				"scale": 0
 			},
 			{
 				"name": "longitud_b",
 				"type": "decimal",
 				"precision": 18,
-				"scale": 8
+				"scale": 0
 			},
 			{
 				"name": "fecha",
-				"type": "datetime",
-				"precision": 23,
-				"scale": 3
+				"type": "nvarchar"
 			},
 			{
 				"name": "duracion",
-				"type": "time",
-				"scale": 7
+				"type": "nvarchar"
 			}
 		],
 		"typeProperties": {
