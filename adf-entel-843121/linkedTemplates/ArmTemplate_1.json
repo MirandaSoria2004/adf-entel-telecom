@@ -133,7 +133,7 @@
 								"referenceName": "ds_sql_bronze_llamadas",
 								"type": "DatasetReference"
 							},
-							"name": "BronzeLlamadas"
+							"name": "bronzeLlamadas"
 						}
 					],
 					"sinks": [
@@ -147,16 +147,13 @@
 					],
 					"transformations": [
 						{
-							"name": "SelectColumns"
+							"name": "SepararLatLong"
 						},
 						{
-							"name": "SepararLatA"
+							"name": "select1"
 						},
 						{
-							"name": "SepararLatB"
-						},
-						{
-							"name": "QuitarColumnasViejas"
+							"name": "BorrarColumnas"
 						}
 					],
 					"scriptLines": [
@@ -179,8 +176,12 @@
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     isolationLevel: 'READ_UNCOMMITTED',",
-						"     format: 'table') ~> BronzeLlamadas",
-						"BronzeLlamadas select(mapColumn(",
+						"     format: 'table') ~> bronzeLlamadas",
+						"select1 derive(latitud_a = toDecimal(split(latitud_longitud_a, ',')[1]),",
+						"          longitud_a = toDecimal(split(latitud_longitud_a, ',')[2]),",
+						"          latitud_b = toDecimal(split(latitud_longitud_b, ',')[1]),",
+						"          longitud_b = toDecimal(split(latitud_longitud_b, ',')[2])) ~> SepararLatLong",
+						"bronzeLlamadas select(mapColumn(",
 						"          servicio,",
 						"          registro,",
 						"          numero_a,",
@@ -197,12 +198,8 @@
 						"          duracion",
 						"     ),",
 						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> SelectColumns",
-						"SelectColumns derive(latitud_a = toDecimal(split(latitud_longitud_a, ',')[1]),",
-						"          longitud_a = toDecimal(split(latitud_longitud_a, ',')[2])) ~> SepararLatA",
-						"SepararLatA derive(latitub_b = toDecimal(split(latitud_longitud_b, ',')[1]),",
-						"          longitud_b = toDecimal(split(latitud_longitud_b, ',')[2])) ~> SepararLatB",
-						"SepararLatB select(mapColumn(",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"SepararLatLong select(mapColumn(",
 						"          servicio,",
 						"          registro,",
 						"          numero_a,",
@@ -217,12 +214,12 @@
 						"          duracion,",
 						"          latitud_a,",
 						"          longitud_a,",
-						"          latitub_b,",
+						"          latitud_b,",
 						"          longitud_b",
 						"     ),",
 						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> QuitarColumnasViejas",
-						"QuitarColumnasViejas sink(allowSchemaDrift: true,",
+						"     skipDuplicateMapOutputs: true) ~> BorrarColumnas",
+						"BorrarColumnas sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     input(",
 						"          servicio as string,",
@@ -280,7 +277,7 @@
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
-									"BronzeLlamadas": {},
+									"bronzeLlamadas": {},
 									"sink1": {}
 								}
 							},
