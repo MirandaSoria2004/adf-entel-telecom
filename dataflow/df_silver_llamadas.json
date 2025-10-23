@@ -29,13 +29,10 @@
 					"name": "SelectColumns"
 				},
 				{
-					"name": "SepararLatA"
+					"name": "SepararLatLong"
 				},
 				{
-					"name": "QuitarColumnasViejas"
-				},
-				{
-					"name": "SepararLatB"
+					"name": "QuitarColumnas"
 				}
 			],
 			"scriptLines": [
@@ -78,8 +75,10 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> SelectColumns",
 				"SelectColumns derive(latitud_a = toDecimal(split(latitud_longitud_a, ',')[1]),",
-				"          longitud_a = toDecimal(split(latitud_longitud_a, ',')[2])) ~> SepararLatA",
-				"SepararLatB select(mapColumn(",
+				"          longitud_a = toDecimal(split(latitud_longitud_a, ',')[2]),",
+				"          latitud_b = toDecimal(split(latitud_longitud_b, ',')[1]),",
+				"          longitud_b = toDecimal(split(latitud_longitud_b, ',')[2])) ~> SepararLatLong",
+				"SepararLatLong select(mapColumn(",
 				"          servicio,",
 				"          registro,",
 				"          numero_a,",
@@ -98,10 +97,8 @@
 				"          longitud_b",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> QuitarColumnasViejas",
-				"SepararLatA derive(latitud_b = toDecimal(split(latitud_longitud_b, ',')[1]),",
-				"          longitud_b = toDecimal(split(latitud_longitud_b, ',')[2])) ~> SepararLatB",
-				"QuitarColumnasViejas sink(allowSchemaDrift: true,",
+				"     skipDuplicateMapOutputs: true) ~> QuitarColumnas",
+				"QuitarColumnas sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          servicio as string,",
@@ -125,6 +122,7 @@
 				"     insertable:true,",
 				"     updateable:false,",
 				"     upsertable:false,",
+				"     truncate:true,",
 				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
