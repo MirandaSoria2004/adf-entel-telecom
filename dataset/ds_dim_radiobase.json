@@ -28,13 +28,13 @@
 				"name": "latitud",
 				"type": "decimal",
 				"precision": 18,
-				"scale": 8
+				"scale": 0
 			},
 			{
 				"name": "longitud",
 				"type": "decimal",
 				"precision": 18,
-				"scale": 8
+				"scale": 0
 			}
 		],
 		"typeProperties": {

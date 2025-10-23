@@ -32,7 +32,7 @@
 				"precision": 10
 			},
 			{
-				"name": "id_numero_a",
+				"name": "id_numera_a",
 				"type": "int",
 				"precision": 10
 			},
