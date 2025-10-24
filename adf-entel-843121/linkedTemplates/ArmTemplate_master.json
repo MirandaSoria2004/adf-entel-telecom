@@ -4,16 +4,16 @@
 	"parameters": {
 		"factoryName": {
 			"type": "string",
-			"metadata": "Nombre de instancia de Data Factory",
+			"metadata": "Data Factory name",
 			"defaultValue": "adf-entel-843121"
 		},
 		"ls_sa_raw_entel_connectionString": {
 			"type": "secureString",
-			"metadata": "Cadena protegida para \"connectionString\"de \"ls_sa_raw_entel\""
+			"metadata": "Secure string for 'connectionString' of 'ls_sa_raw_entel'"
 		},
 		"ls_sql_dw_entel_password": {
 			"type": "secureString",
-			"metadata": "Cadena protegida para \"password\"de \"ls_sql_dw_entel\""
+			"metadata": "Secure string for 'password' of 'ls_sql_dw_entel'"
 		},
 		"ls_sql_dw_entel_properties_typeProperties_server": {
 			"type": "string",
@@ -29,11 +29,11 @@
 		},
 		"containerUri": {
 			"type": "string",
-			"metadata": "URI de la cuenta de almacenamiento que contiene las plantillas de ARM vinculadas."
+			"metadata": "URI to storage account containing linked ARM templates"
 		},
 		"containerSasToken": {
 			"type": "string",
-			"metadata": "Token de SAS para la cuenta de almacenamiento que contiene las plantillas de ARM vinculadas"
+			"metadata": "Sas token to storage account containing linked ARM templates"
 		}
 	},
 	"variables": {
